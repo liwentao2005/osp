@@ -21,6 +21,17 @@ struct SCA_Client_Instance_Tag
 typedef struct SCA_Client_Instance_Tag SCA_Client_Instance_T;
 
 /**
+ * This type represents a 4-character-code (a "fourcc" like 'DRVR' for "driver",
+ *  or 'MSTR' for "master")
+ *
+ * @note This is *not* a C string - there is no NUL terminating character
+ *
+ * Example Usage:
+ *   SCA_Socket_Client_Unique_ID_T my_client_id = SCA_FOURCC_TO_UID('D','R','V','R');
+ */
+typedef uint32_t SCA_Socket_Client_Unique_ID_T;
+
+/**
  * This type represents an application message
  *
  * @note This structure is always malloc'ed, and the "payload" field may be
@@ -31,7 +42,7 @@ typedef struct SCA_Message_T_struct_tag
 {
     uint32_t code;         /** The "message ID" code */
     uint32_t data;         /** 32-bits of data */
-    //uint32_t payload_size; /** length of payload in bytes */
+    uint32_t payload_size; /** length of payload in bytes */
     char payload[1];       /** This DYNAMIC field MUST BE LAST */
 } SCA_Message_T;
 
@@ -44,6 +55,41 @@ typedef struct SCA_Message_T_struct_tag
  *   SCA_Listen(my_callback);
  */
 typedef void (*SCA_Message_Callback_T)(SCA_Message_T const * const message);
+
+/*===========================================================================*
+ * Exported Function Prototypes
+ *===========================================================================*/
+
+/**
+ * This function converts the first 4-characters of "unique_fourcc_name"
+ * (a "fourcc" like "DRVR" for "driver", or "MSTR" for "master") to the
+ * SCA_Socket_Client_Unique_ID_T type, and returns it
+ *
+ * @return The UID result.
+ *
+ * @param unique_fourcc_name Pointer to string containing UID.
+ *
+ * Example Usage:
+ *   SCA_Socket_Client_Unique_ID_T my_client_id = SCA_Convert_String_To_UID("MSTR");
+ */
+SCA_Socket_Client_Unique_ID_T SCA_Convert_String_To_UID(char const * const unique_fourcc_name);
+
+/**
+ * Converts a UID to a string of 4 printable characters followed by a NUL terminator;
+ * the function will not write beyond the specified buffer boundaries and will
+ * guarantee a NUL terminator.
+ *
+ * @param uid      The UID value to be converted.
+ * @param buf      Pointer to where first character is to be written.
+ * @param buf_size Number of char slots available starting at 'buf';
+ *                           this should be at least 5 for the result to not be
+ *                           truncated.
+ *
+ * Example Usage:
+ *     char uid_str[5];
+ *     SCA_UID_To_String(uid, uid_str, sizeof(uid_str));
+ */
+void SCA_UID_To_String(uint32_t uid, char *buf, size_t buf_size);
 
 /**
  * This function sets up a thread to call "callback" function when messages

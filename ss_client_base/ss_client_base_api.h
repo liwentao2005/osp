@@ -6,6 +6,17 @@ extern "C"
 { /* ! Inclusion of header files should NOT be inside the extern "C" block */
 #   endif /* __cplusplus */
 
+/*===========================================================================*
+ * Exported Type Declarations
+ *===========================================================================*/
+typedef struct SC_Message_S
+{
+	unsigned int code;		 /** The "message ID" code */
+	unsigned int data;		 /** 32-bits of data */
+	unsigned int payload_size; /** length of payload in bytes */
+	char payload[1];		 /** This DYNAMIC field MUST BE LAST */
+} SC_Message_T;
+
 /* definition of data structure for share memory block*/
 typedef struct SClt_NameStore_s
 {
@@ -17,6 +28,9 @@ typedef struct SClt_NameStore_s
 #define  SOCKETSERVER_CLIENT_NAME    "examp"
 
 int SSClient_Name_Generator(char *Base_Nam, char *Client_Nam, int Client_Name_size);
+unsigned int Init_SocketServer_Client_Defult(char *Client_Name, void* CallBack);
+
+void Launch_SocketServer_Client(unsigned int Client_ID);
 
 #   ifdef __cplusplus
 } /* extern "C" */
