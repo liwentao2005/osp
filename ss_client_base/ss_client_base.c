@@ -59,7 +59,7 @@ typedef struct SS_Client_Info_S
 	unsigned int           		Port;
 	unsigned int           		Application_UID;
 	char                   		*Ip_Address;
-	//SCA_Client_Instance_T 		*Application_Instance;
+	SCA_Client_Instance_T 		*Application_Instance;
 	char                   		Name[16];
 	SCA_Message_Callback_T 		RcvMsg_CallBack;
 	struct  SS_Client_Info_S	*pNext;
@@ -284,7 +284,7 @@ void* ss_client_start(void *arg)
      printf("\n ss client instance does not exist !\n");
      return NULL;
    }
-#if 0
+
    printf("\n SocketServer Client library version %s\nOpening client socket connection as '%s' on '%s', port %d...\n",
           SCA_Get_Version(), client_instance->Name, client_instance->Ip_Address, client_instance->Port);
 
@@ -295,7 +295,7 @@ void* ss_client_start(void *arg)
    	 printf("\n ss client application instance does not exist !\n");
      return NULL;
    }
- 
+#if 0 // TODO 
    
    SCA_Listen(client_instance->Application_Instance,  client_instance->RcvMsg_CallBack);
    SCA_Connect(client_instance->Application_Instance, client_instance->Ip_Address, client_instance->Port, client_instance->Application_UID);
@@ -308,7 +308,7 @@ void* ss_client_start(void *arg)
       usleep(200*1000);
     #endif
    }
-
+#endif
    printf("SocketSever_Client: %s           connect successfully\n",client_instance->Name);
  #if 0
    while (!client_instance->Exit_Requested)
@@ -327,7 +327,6 @@ void* ss_client_start(void *arg)
    
    Destory_SocketServer_Client(client_instance->Application_UID);
  #endif
-   #endif
    return NULL;
 }
 
