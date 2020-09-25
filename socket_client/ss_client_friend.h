@@ -120,7 +120,7 @@ struct SCA_Client_Instance_Tag
       pthread_mutex_t send_lock; /** Used to make sends thread-safe. */
       int socket_ref;         /** Socket file descriptor */
       int connect_result;     /** -1 if call to connect() failed */
-      //SCA_Connection_State_T connection_state; /** Current state of the connection to the SocketServer*/
+      SCA_Connection_State_T connection_state; /** Current state of the connection to the SocketServer*/
       int read_error_occured; /** Non-zero if a read error occured last time we tried */
       struct sockaddr_in socket_adr; /** Socket connect() info */
       SCA_Socket_Client_Unique_ID_T uid; /** Client 4-char unique ID */

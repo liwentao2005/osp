@@ -64,7 +64,7 @@ typedef struct SS_Client_Info_S
 	SCA_Message_Callback_T 		RcvMsg_CallBack;
 	struct  SS_Client_Info_S	*pNext;
 	struct  SS_Client_Info_S	*pPrev;
-	//bool  					Exit_Requested;
+	bool_t  					Exit_Requested;
 }SS_Client_Info_T;
 
 
@@ -297,9 +297,7 @@ void* ss_client_start(void *arg)
    }
    
    SCA_Listen(client_instance->Application_Instance,  client_instance->RcvMsg_CallBack);
-#if 0 // TODO    
    SCA_Connect(client_instance->Application_Instance, client_instance->Ip_Address, client_instance->Port, client_instance->Application_UID);
-
    while (!SCA_Is_Connected(client_instance->Application_Instance) && !client_instance->Exit_Requested)
    {
     #if 0 /* baodong.kan@20171114, shorter sleep time for fastboot */
@@ -308,7 +306,7 @@ void* ss_client_start(void *arg)
       usleep(200*1000);
     #endif
    }
-#endif
+
    printf("SocketSever_Client: %s           connect successfully\n",client_instance->Name);
  #if 0
    while (!client_instance->Exit_Requested)

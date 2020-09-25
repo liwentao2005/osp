@@ -28,7 +28,9 @@ int main(void)
         printf("SSClient_Name_Generator: %s OK.\n", CAN_IF_CLIENT_NAME);
     }
     
+    /*1.Get SS_Client_Info_T*/
     CAN_IF_Client_ID = Init_SocketServer_Client_Defult(CAN_IF_CLIENT_NAME, (void*)&Received_Message_Callback);
+    /**/
     Launch_SocketServer_Client(CAN_IF_Client_ID);
     
     return 0;

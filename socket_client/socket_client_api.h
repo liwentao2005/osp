@@ -100,6 +100,60 @@ typedef void (*SCA_Message_Context_Callback_T)(SCA_Message_T const * const messa
 struct SCA_Client_Instance_Tag;
 typedef struct SCA_Client_Instance_Tag SCA_Client_Instance_T;
 
+typedef enum SCA_Connection_Error_Tag
+{
+   /*==========================*\
+    * vvvvvvvvvvvvvvvvvvvvvvvv *
+    *    Connection errors     *
+   \*==========================*/
+   SCA_NO_CONNECTION_ERROR, /**< Connection to the SocketServer occurred without incident */
+   SCA_CONNECTION_RETRY,    /**< Unable to establish connection, retrying */
+
+   /*==========================*\
+    * ^^^^^^^^^^^^^^^^^^^^^^^^ *
+   \*==========================*/
+
+
+   /*==========================*\
+    * vvvvvvvvvvvvvvvvvvvvvvvv *
+    *   Disconnection errors   *
+   \*==========================*/
+   SCA_DISCONNECT_CLEAN,     /**< Disconnection from the SocketServer occurred without incident */
+   SCA_DISCONNECT_UNCLEAN,   /**< Disconnection from the SocketServer did not occur within 10 seconds of the request */
+   SCA_UNKNOWN_WRITEV_ERROR, /**< Attempt to write to socket failed with an unknown error code */
+   SCA_WRITEV_EINTR_ERROR,   /**< Attempt to write to socket failed with EINTR error code */
+   SCA_READV_0_BYTES,        /**< Attempted read from socket resulted in 0 bytes read, indicating a disconnect */
+   SCA_UNKNOWN_READV_ERROR,  /**< Attempted read from socket failed with an unknown error code */
+   /*==========================*\
+    * ^^^^^^^^^^^^^^^^^^^^^^^^ *
+   \*==========================*/
+}
+SCA_Connection_Error_T;
+
+/**
+ * Describes the state of the connection with the SocketServer for this client
+ */
+typedef enum SCA_Connection_State_Tag
+{
+   SCA_DISCONNECTED,        /**< Not currently connected to a SocketServer */
+   SCA_CONNECTING,          /**< Attempting to connect to a SocketServer */
+   SCA_CONNECTED,           /**< Successfully connected to a SocketServer */
+   SCA_DISCONNECTING,       /**< Attempting to disconnect from a SocketServer */
+   SCA_NUM_CONNECTION_STATES
+}
+SCA_Connection_State_T;
+
+/**
+ * Type of callback function that can be used to obtain connection status updates.
+ *
+ * @param instance Pointer to the client instance data.
+ * @param current_connection_state Current connection state.
+ * @param connection_error Code describing any error that occurred.
+ */
+typedef void (*SCA_Connection_Info_Callback_T)(SCA_Client_Instance_T * instance,
+                                               SCA_Connection_State_T current_connection_state,
+                                               SCA_Connection_Error_T connection_error);
+
 /**
  * This function converts the first 4-characters of "unique_fourcc_name"
  * (a "fourcc" like "DRVR" for "driver", or "MSTR" for "master") to the
@@ -130,6 +184,14 @@ SCA_Socket_Client_Unique_ID_T SCA_Convert_String_To_UID(char const * const uniqu
  *     SCA_UID_To_String(uid, uid_str, sizeof(uid_str));
  */
 void SCA_UID_To_String(uint32_t uid, char *buf, size_t buf_size);
+
+/**
+ * Adds a millisecond resolution offset to a timespec
+ *
+ * @param time_spec - time to which to apply the offset
+ * @param time_offset_ms - offset to apply
+ */
+void SCA_Time_Add_Offset(struct timespec* time_spec, uint32_t time_offset_ms);
 
 /**
  * @return The version string for the SS client library.
@@ -181,6 +243,66 @@ char const *SCA_Get_Version(void);
  *       is through with the instance; failure to do so will cause a leak.
  */
 SCA_Client_Instance_T *SCA_Create_Instance_With_UID(SCA_Socket_Client_Unique_ID_T unique_id);
+
+/**
+ * This function returns 1 if connected to SocketServer 0 if not connected to
+ * SocketServer
+ *
+ * @return 1 if connected; 0 if not connected.
+ *
+ * @param instance       Pointer to client instance data.
+ *
+ *Example Usage:
+ *  while(!SCA_Is_Connected(&instance))
+ *  {
+ *    sleep(1);
+ *  }
+ */
+int SCA_Is_Connected(SCA_Client_Instance_T* instance);
+
+/**
+ * This MACRO invokes SCA_Connect_With_Notification() with a NULL connection
+ * info callback; it is present for backwards compatibility purposes.
+ *
+ * @param instance       Pointer to client instance data.
+ * @param tcp_ip_address Address used to contact SocketServer
+ * @param port           Port number on which to contact SocketServer
+ * @param unique_id      UID for this client.
+ *
+ * Example Usage:
+ *   SCA_Connect(&instance, "127.0.0.1", 1255, SCA_FOURCC_TO_UID('M','S','T','R'));
+ *
+ * @note This function will erase any data present in instance. Therefore, be certain
+ *       the instance is no longer used to avoid orphan instances.
+ */
+#define SCA_Connect(instance, tcp_ip_address, port, unique_id) SCA_Connect_With_Notification(instance, tcp_ip_address, port, unique_id, NULL)
+
+/**
+ * This function opens a TCP/IP socket, and then spawns a thread to connect
+ * to SocketServer. After a connection is made, the thread sends the client's
+ * "unique_id". Connect/disconnect status is communicated via the callback
+ * function specified by the caller (which can be NULL if no status is needed).
+ *
+ * @param instance       Pointer to client instance data.
+ * @param tcp_ip_address Address used to contact SocketServer
+ * @param port           Port number on which to contact SocketServer
+ * @param unique_id      UID for this client.
+ * @param connection_info_callback Pointer to callback made whenever the connection
+ *                       status with SocketServer changes; can be NULL.
+ *
+ * Example Usage:
+ *   SCA_Connect_With_Notification(&instance, "127.0.0.1", 1255,
+ *                                 SCA_FOURCC_TO_UID('M','S','T','R'),
+ *                                 SS_Connection_Status_Changed);
+ *
+ * @note This function will erase any data present in instance. Therefore, be certain
+ *       the instance is no longer used to avoid orphan instances.
+ */
+void SCA_Connect_With_Notification(SCA_Client_Instance_T* instance,
+                                   char const * const tcp_ip_address,
+                                   unsigned short port,
+                                   SCA_Socket_Client_Unique_ID_T unique_id,
+                                   SCA_Connection_Info_Callback_T connection_info_callback);
 
 /**
  * This function sets up a thread to call "callback" function when messages
