@@ -45,7 +45,7 @@ add_subdirectory(socket_client)
 include_directories ("${PROJECT_SOURCE_DIR}/ss_client_base")
 add_subdirectory(ss_client_base)
 add_executable(ss_client_base_test ss_client_base_test.cpp)
-target_link_libraries(ss_client_base_test ss_client_base)
+target_link_libraries(ss_client_base_test ss_client_base pthread)
 
 install (TARGETS Tutorial DESTINATION bin)
 install (FILES "${PROJECT_BINARY_DIR}/TutorialConfig.h"

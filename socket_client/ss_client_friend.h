@@ -48,7 +48,7 @@
 #   include <pthread.h>
 #   include "socket_client_api.h" /* Declares SS_ENABLE_SSL */
 
-#   ifndef SS_ENABLE_SSL
+#   ifdef SS_ENABLE_SSL
 #      error "SS_ENABLE_SSL not specified"
 #   elif SS_ENABLE_SSL != 0
 #      include <openssl/bio.h>
@@ -86,7 +86,7 @@ extern "C"
  * This constant can be made non-zero to print out details of what is happening
  */
 #ifndef SCA_VERBOSE
-# define SCA_VERBOSE (1)
+# define SCA_VERBOSE (0)
 #endif
 
 #ifndef SS_DBC_PATH
@@ -213,9 +213,9 @@ struct SCA_Client_Instance_Tag
 #endif
 
 #define SCA_ERR_NULL(a, b)  Tr_Fault_1(a, b)
-#define SCA_ERR_0(a)     Tr_Fault_1("[%s] " a, (instance ? instance->uid_str:"NULL"))
-#define SCA_ERR_1(a,b)   Tr_Fault_2("[%s] " a, (instance ? instance->uid_str:"NULL"), b)
-#define SCA_ERR_2(a,b,c) Tr_Fault_3("[%s] " a, (instance ? instance->uid_str:"NULL"), b, c)
+#define SCA_ERR_0(a)     /*Tr_Fault_1("[%s] " a, (instance ? instance->uid_str:"NULL"))*/
+#define SCA_ERR_1(a,b)   /*Tr_Fault_2("[%s] " a, (instance ? instance->uid_str:"NULL"), b)*/
+#define SCA_ERR_2(a,b,c) /*Tr_Fault_3("[%s] " a, (instance ? instance->uid_str:"NULL"), b, c)*/
 
 #ifdef __cplusplus
 }

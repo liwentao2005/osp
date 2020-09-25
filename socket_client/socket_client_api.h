@@ -2,11 +2,41 @@
 #define SOCKET_CLIENT_API_H
 
 #include "reuse.h"
+#include "ss_interface.h"
+#include <arpa/inet.h>
+#include <pthread.h>
+#include <semaphore.h>
+#include <sys/socket.h>
 
 #   ifdef __cplusplus
 extern "C"
 { /* ! Inclusion of header files should NOT be inside the extern "C" block */
 #   endif /* __cplusplus */
+
+/**
+ * UID temporarily assigned between calls SCA_Create_Instance() and
+ * SCA_Connect(). Use SCA_Create_Instance_With_UID() to eliminate this gap.
+ */
+#define SCA_UNKNOWN_UID SCA_FOURCC_TO_UID('?','?','?','?')
+
+/*===========================================================================*
+ * Exported Preprocessor #define MACROS
+ *===========================================================================*/
+
+/**
+ * This macro converts a 4-character-code (a "fourcc" like 'DRVR' for "driver",
+ * or 'MSTR' for "master") to the SCA_Socket_Client_Unique_ID_T type
+ *
+ * @return A uint32_t value that combines the four characters.
+ * @param [in] a The most significant character.
+ * @param [in] b The 2nd most significant character.
+ * @param [in] c The 3rd most significant character.
+ * @param [in] d The least significant character.
+ *
+ * Example Usage:
+ *   SCA_Socket_Client_Unique_ID_T my_client_id = SCA_FOURCC_TO_UID('M','S','T','R');
+ */
+#   define SCA_FOURCC_TO_UID(a,b,c,d) SS_FOURCC_TO_UID(a,b,c,d)
 
 /**
  * Anonymous types used to hold client context.

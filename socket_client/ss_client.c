@@ -1,3 +1,7 @@
+#include "ss_client_private.h"
+#include "socket_client_api.h"
+#include "ss_client_friend.h"
+#include "ss_version.h"
 #include <arpa/inet.h>
 #include <ctype.h>
 #include <errno.h>
@@ -12,11 +16,33 @@
 #include <sys/socket.h>
 #include <time.h>
 #include <unistd.h>
-#include "socket_client_api.h"
-#include "ss_version.h"
 
 int func_cnt = 0;
 int now_flag = 0;
+
+
+/*
+ * Please refer to ss_client_private.h for the description.
+ */
+bool_t sca_Instance_Is_Valid_Func(char const *func_name, SCA_Client_Instance_T* instance)
+{
+   bool_t result = false;
+
+   if (NULL == instance)
+   {
+      //SCA_ERR_NULL("%s was passed a NULL instance.", func_name);
+   }
+   else if (instance->valid_pattern != SCA_CONTEXT_PATTERN)
+   {
+      //SCA_ERR_1("%s was passed an instance that appears to not have been initialized.", func_name);
+   }
+   else
+   {
+      result = true;
+   }
+
+   return result;
+}
 
 /*
  * Please refer to socket_client_api.h for the description.
@@ -42,6 +68,49 @@ SCA_Socket_Client_Unique_ID_T SCA_Convert_String_To_UID(char const *const unique
     }
 
     return return_value;
+}
+
+
+/*
+ * Please refer to socket_client_api.h for the description.
+ */
+void SCA_Set_UID(SCA_Client_Instance_T* instance, SCA_Socket_Client_Unique_ID_T unique_id)
+{
+   if (sca_Instance_Is_Valid(instance) && (unique_id != instance->uid))
+   {
+      if (instance->uid != 0)
+      {
+         /* Reject attempts to change the UID once it is set. */
+         char local_uid_str[sizeof(unique_id) + 1] =
+            { 0 };
+         SCA_UID_To_String(unique_id, local_uid_str, sizeof(local_uid_str));
+         SCA_ERR_1("Rejecting attempt to change UID to %s", local_uid_str);
+      }
+      else
+      {
+         ssize_t path_size;
+
+         instance->uid = unique_id;
+         SCA_UID_To_String(unique_id, instance->uid_str, sizeof(instance->uid_str));
+
+         path_size = snprintf(NULL, 0, "%s%s", SS_DBC_PATH, instance->uid_str);
+         if (path_size > 0)
+         {
+            ++path_size; /* account for NUL terminator */
+            instance->dbg_ctrl_path = malloc(path_size);
+            if (instance->dbg_ctrl_path != NULL)
+            {
+               snprintf(instance->dbg_ctrl_path, path_size, "%s%s", SS_DBC_PATH, instance->uid_str);
+               SCA_DEBUG_1("Attempting to read dbg_ctrl levels from '%s'", instance->dbg_ctrl_path);
+               //Tr_Read_Trace_Levels(instance->dbg_ctrl_path);
+            }
+         }
+         else
+         {
+            SCA_ERR_0("Could not form name for dbg_trace persistent path");
+         }
+      }
+   }
 }
 
 /*
@@ -125,8 +194,8 @@ SCA_Client_Instance_T *SCA_Create_Instance_With_UID(SCA_Socket_Client_Unique_ID_
       {
          SCA_Set_UID(instance, unique_id);
       }
-
-      create_blocklist(&(instance->subscription_list), DEFAULT_ITEMS_PER_BLOCK, sizeof(SCA_Subscribe_Data_T), 0);
+        //TODO
+      //create_blocklist(&(instance->subscription_list), DEFAULT_ITEMS_PER_BLOCK, sizeof(SCA_Subscribe_Data_T), 0);
       /*
        * Allocate initial buffer used for receiving
        */

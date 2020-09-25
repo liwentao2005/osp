@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "ss_client_private.h": "c",
+        "ss_client_friend.h": "c",
+        "socket_client_api.h": "c"
+    }
+}
