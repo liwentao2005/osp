@@ -214,8 +214,29 @@ SCA_Client_Instance_T *SCA_Create_Instance_With_UID(SCA_Socket_Client_Unique_ID_
 /*
  * Please refer to socket_client_api.h for the description.
  */
-int SCA_Listen(SCA_Client_Instance_T *instance, SCA_Message_Callback_T callback)
+int SCA_Listen(SCA_Client_Instance_T* instance, SCA_Message_Callback_T callback)
 {
-    printf("%s--%d.\n", __FILE__, __LINE__);
-    return 0;
+   return SCA_Listen_With_Context(instance, (SCA_Message_Context_Callback_T) callback, NULL);
+}
+
+/*
+ * Please refer to socket_client_api.h for the description.
+ */
+int SCA_Listen_With_Context(SCA_Client_Instance_T* instance, SCA_Message_Context_Callback_T callback, void* context)
+{
+
+   int result = -1;
+
+   if (sca_Instance_Is_Valid(instance))
+   {
+      instance->context = context;
+      instance->callback = callback;
+      result = 0;
+   }
+   else
+   {
+      SCA_ERR_0("SCA_Listen_With_Context: Cannot handle NULL instance");
+   }
+
+   return result;
 }

@@ -295,9 +295,9 @@ void* ss_client_start(void *arg)
    	 printf("\n ss client application instance does not exist !\n");
      return NULL;
    }
-#if 0 // TODO 
    
    SCA_Listen(client_instance->Application_Instance,  client_instance->RcvMsg_CallBack);
+#if 0 // TODO    
    SCA_Connect(client_instance->Application_Instance, client_instance->Ip_Address, client_instance->Port, client_instance->Application_UID);
 
    while (!SCA_Is_Connected(client_instance->Application_Instance) && !client_instance->Exit_Requested)

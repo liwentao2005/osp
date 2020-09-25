@@ -80,6 +80,16 @@ typedef struct SCA_Message_T_struct_tag
  */
 typedef void (*SCA_Message_Callback_T)(SCA_Message_T const * const message);
 
+/**
+ * This type represents a callback function a client can use to receive
+ * incoming messages
+ *
+ * Example Usage:
+ *   SCA_Message_Context_Callback_T my_callback = \&my_message_handler;
+ *   SCA_Listen_With_Context(my_callback, this);
+ */
+typedef void (*SCA_Message_Context_Callback_T)(SCA_Message_T const * const message, void* context);
+
 /*===========================================================================*
  * Exported Function Prototypes
  *===========================================================================*/
@@ -185,6 +195,23 @@ SCA_Client_Instance_T *SCA_Create_Instance_With_UID(SCA_Socket_Client_Unique_ID_
  *   SCA_Listen(&instance, &my_message_handler);
  */
 int SCA_Listen(SCA_Client_Instance_T* instance, SCA_Message_Callback_T callback);
+
+/**
+ * This function sets up a thread to call "callback" function when messages
+ * arrive for the client
+ *
+ * @return 0 for success, -1 if socket is not yet open.
+ *
+ * @param instance  Pointer to client instance data.
+ * @param     callback  Function to call and pass received messages to
+ * @param context   Pointer to client-specific data context ("this" pointer).
+ *
+ * Example Usage:
+ *   SCA_Listen(&instance, &my_message_handler, this);
+ */
+int SCA_Listen_With_Context(SCA_Client_Instance_T* instance,
+                            SCA_Message_Context_Callback_T callback,
+                            void* context);
 
 #   ifdef __cplusplus
 } /* extern "C" */
