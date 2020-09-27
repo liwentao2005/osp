@@ -335,6 +335,35 @@ int SCA_Listen_With_Context(SCA_Client_Instance_T* instance,
                             SCA_Message_Context_Callback_T callback,
                             void* context);
 
+
+/**
+ * This function sends an application message to the client that has the unique
+ * id specified by "destination_client_uid"
+ *
+ * @return The number of bytes sent (16 + payload size); -1 if socket not yet open.
+ *
+ * @param instance                Pointer to client instance data.
+ * @param     destination_client_uid  UID of client to which to send message
+ * @param     code                    Message code.
+ * @param     data                    Message data field (0 if no data)
+ * @param     payload                 Pointer to message payload (NULL if none)
+ * @param     payload_size            Number of bytes in payload (0 if no payload)
+ *
+ * Example Usage:
+ *   SCA_Send(&instance,
+ *            SCA_FOURCC_TO_UID('R','C','V','R'),
+ *            0x00001234,
+ *            0x0000FFFF,
+ *            "Sending This String",
+ *            strlen("Sending This String") + 1);
+ */
+int SCA_Send(SCA_Client_Instance_T* instance,
+             SCA_Socket_Client_Unique_ID_T destination_client_uid,
+             uint32_t code,
+             uint32_t data,
+             void const * const payload,
+             uint32_t payload_size);
+
 #   ifdef __cplusplus
 } /* extern "C" */
 #   endif /* __cplusplus */

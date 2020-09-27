@@ -31,6 +31,7 @@ int SSClient_Name_Generator(char *Base_Nam, char *Client_Nam, int Client_Name_si
 unsigned int Init_SocketServer_Client_Defult(char *Client_Name, void* CallBack);
 
 void Launch_SocketServer_Client(unsigned int Client_ID);
+int  SocketServer_Client_Send(unsigned int Client_ID,  char *receiver_name, unsigned int message_id, unsigned int data, void *payload, unsigned int payload_size);
 
 #   ifdef __cplusplus
 } /* extern "C" */

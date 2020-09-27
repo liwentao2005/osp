@@ -269,6 +269,19 @@ unsigned int Init_SocketServer_Client_Defult(char *Client_Name, void *CallBack)
 	return client_instance->Application_UID;
 }
 
+SCA_Client_Instance_T 	*Get_Client_App_Instance(unsigned int Client_ID)
+{
+	SS_Client_Info_T *SS_Client;
+
+
+	SS_Client=Get_SSClient_Frm_List(Client_ID);
+	if(SS_Client == NULL)
+	{
+		return NULL;
+	}
+	return SS_Client->Application_Instance;
+}
+
 void* ss_client_start(void *arg)
 { 
    uint32_t     client_ID;
@@ -341,6 +354,30 @@ void Launch_SocketServer_Client(unsigned int Client_ID)
    #else
    	ss_client_start(&ClientID);
    #endif
+}
+
+int SocketServer_Client_Send(unsigned int Client_ID,  char *receiver_name, unsigned int message_id, unsigned int data, void *payload, unsigned int payload_size)
+{
+	int res;
+	SCA_Client_Instance_T *Application_Instance;
+	unsigned int dst_uid;
+
+	if(receiver_name == NULL)
+    {
+    	return -1;
+    }
+	
+	Application_Instance=Get_Client_App_Instance(Client_ID);
+	if(Application_Instance == NULL )
+	{
+		return -1;
+	}
+	
+	dst_uid=SCA_Convert_String_To_UID(receiver_name);
+	
+	res=SCA_Send(Application_Instance, dst_uid, message_id, data, payload, payload_size);
+
+	return res;
 }
 
 int  SocketServer_Client_CID_To_String(unsigned int Client_ID, char *NamBuf, unsigned int NamBuf_Size)

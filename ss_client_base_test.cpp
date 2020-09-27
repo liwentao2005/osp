@@ -32,6 +32,8 @@ int main(void)
     CAN_IF_Client_ID = Init_SocketServer_Client_Defult(CAN_IF_CLIENT_NAME, (void*)&Received_Message_Callback);
     /**/
     Launch_SocketServer_Client(CAN_IF_Client_ID);
+    /*inital CAN HVAC value*/
+    SocketServer_Client_Send(CAN_IF_Client_ID, "NAME", 100 /*CAN_IF_HVAC_INIT_UPDATE*/, CAN_IF_Client_ID , NULL , 0);
     
     return 0;
 }

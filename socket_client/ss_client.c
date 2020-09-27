@@ -986,6 +986,24 @@ int SCA_Listen_With_Context(SCA_Client_Instance_T* instance, SCA_Message_Context
    return result;
 }
 
+/*
+ * Please refer to socket_client_api.h for the description.
+ */
+int SCA_Send(SCA_Client_Instance_T* instance, SCA_Socket_Client_Unique_ID_T destination_client_uid, uint32_t code, uint32_t data,
+   void const * const payload, uint32_t payload_size)
+{
+   /* TODO: copy-and-short-circuit for local client destination
+    (but what about Spying on these messages?) */
+   int ret_val = -1;
+
+   if (sca_Instance_Is_Valid(instance))
+   {
+      ret_val = sca_Send_Message(instance, destination_client_uid, code, data, payload, payload_size);
+   }
+
+   return ret_val;
+}
+
 static void Shutdown(SCA_Client_Instance_T* instance)
 {
    if (sca_Instance_Is_Valid(instance))
