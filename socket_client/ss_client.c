@@ -318,6 +318,7 @@ static void Establish_Connection(SCA_Client_Instance_T *instance)
         }
         else
         {
+           printf("Establish_Connection: '%s'\n", "Establish_Connection");
             if (instance->is_ssl_client)
             {
                 //sca_Configure_SSL_Socket(instance);

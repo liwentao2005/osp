@@ -27,6 +27,8 @@ int main(int argc, char *argv[])
 {
    unsigned short non_secure_port;
    unsigned short secure_port;
+      non_secure_port = 0;
+      secure_port = SS_Port_Number;
    SS_Server = new Socket_Server_T(non_secure_port, secure_port, SS_JSON_Log_File, SS_JSON_Log_Size);
 
    if (NULL == SS_Server)

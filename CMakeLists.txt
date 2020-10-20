@@ -38,7 +38,7 @@ target_link_libraries(xsal_test xsal)
 
 #new directory
 #include_directories ("${PROJECT_SOURCE_DIR}/socket_server")
-add_subdirectory(socket_server)
+#add_subdirectory(socket_server)
 #target_link_libraries(ss_client_base socket_client)
 
 #new directory
