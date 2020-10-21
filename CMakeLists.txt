@@ -37,6 +37,16 @@ add_executable(xsal_test xsal_test.cpp)
 target_link_libraries(xsal_test xsal)
 
 #new directory
+include_directories ("${PROJECT_SOURCE_DIR}/utilities")
+add_subdirectory(utilities)
+#target_link_libraries(ss_client_base socket_client)
+
+#new directory
+#include_directories ("${PROJECT_SOURCE_DIR}/osp_timer")
+add_subdirectory(osp_timer)
+#target_link_libraries(ss_client_base socket_client)
+
+#new directory
 #include_directories ("${PROJECT_SOURCE_DIR}/socket_server")
 #add_subdirectory(socket_server)
 #target_link_libraries(ss_client_base socket_client)
