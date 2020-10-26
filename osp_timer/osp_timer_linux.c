@@ -48,7 +48,7 @@
 #include "xsal_settings.h"
 //#include "xsal_cbk.h"
 //#include "xsal_i_thread.h"
-//#include "xsal_i_timer.h"
+#include "xsal_i_timer.h"
 #include "osp_timer_linux.h"
 
 #include <errno.h>

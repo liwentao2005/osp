@@ -43,8 +43,12 @@ add_subdirectory(utilities)
 
 #new directory
 #include_directories ("${PROJECT_SOURCE_DIR}/osp_timer")
-add_subdirectory(osp_timer)
+#add_subdirectory(osp_timer)
 #target_link_libraries(ss_client_base socket_client)
+## timer test bin
+#include_directories ("${PROJECT_SOURCE_DIR}/osp_timer")
+#add_executable(testTimer testTimer_main.cpp)
+#target_link_libraries(testTimer osp_timer pthread)
 
 #new directory
 #include_directories ("${PROJECT_SOURCE_DIR}/socket_server")
@@ -54,6 +58,11 @@ add_subdirectory(osp_timer)
 #new directory
 #include_directories ("${PROJECT_SOURCE_DIR}/socket_client")
 add_subdirectory(socket_client)
+#target_link_libraries(ss_client_base socket_client)
+
+#new directory
+#include_directories ("${PROJECT_SOURCE_DIR}/socket_client")
+add_subdirectory(xsal)
 #target_link_libraries(ss_client_base socket_client)
 
 #new directory
