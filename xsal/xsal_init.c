@@ -18,9 +18,9 @@
 // #include "xsal_i_buffer_pools.h"
 // #include "xsal_i_engine.h"
 #include "xsal_i_thread.h"
-#include "xsal_i_timer.h"
+//#include "xsal_i_timer.h"
 // #include "xsal_i_publish.h"
-//#include "xsal_i_event_property.h"
+#include "xsal_i_event_property.h"
 #if defined (XSAL)
 #   include "xsal_i_ns_proxy.h"
 //#   include "xsal_i_connections.h"
