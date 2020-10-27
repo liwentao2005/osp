@@ -5,6 +5,7 @@ project (Tutorial)
 set (Tutorial_VERSION_MAJOR 2)
 set (Tutorial_VERSION_MINOR 1)
 
+set (CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -g")
 
 option (USE_MYMATH
 		"Use tutorial provided math implementation" ON)
