@@ -10,8 +10,9 @@ add_library(xsalc SHARED xsal_ns_thread.c xsal_get_config.c
             xsal_i_engine.c
             xsal_i_connections.c
             xsal_rpc_linux.c
-            xsal_ns_proxy.c)
-target_link_libraries(xsalc utilities pthread)
+            xsal_ns_proxy.c
+            xsal_open_shared_memory.c xsal_create_shared_memory.c xsal_close_shared_memory.c)
+target_link_libraries(xsalc utilities pthread rt)
 
 # install
 install (TARGETS xsalc DESTINATION bin)
