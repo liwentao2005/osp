@@ -312,7 +312,7 @@ void SAL_I_Free_Thread_Resources(SAL_Thread_Id_T thread_id)
 
    Tr_Info_Mid_1("Destroy_Thread_Itself %d", (int)thread_id);
 
-   SAL_I_Destroy_And_Unbind_Timers_From_Thread(thread_attr);
+   //SAL_I_Destroy_And_Unbind_Timers_From_Thread(thread_attr);
 
    if (SAL_Lock_Mutex(&SAL_I_Event_Property_Mutex))
    {
