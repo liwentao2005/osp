@@ -15,11 +15,11 @@
 #include "xsal_i_assert.h"
 #include "xsal_i_config.h"
 // #include "xsal_i_dt.h"
-// #include "xsal_i_buffer_pools.h"
+#include "xsal_i_buffer_pools.h"
 // #include "xsal_i_engine.h"
 #include "xsal_i_thread.h"
 //#include "xsal_i_timer.h"
-// #include "xsal_i_publish.h"
+#include "xsal_i_publish.h"
 #include "xsal_i_event_property.h"
 #if defined (XSAL)
 #   include "xsal_i_ns_proxy.h"
@@ -71,11 +71,11 @@ bool_t SAL_Init(const SAL_Config_T* sal_config)
       SAL_First_Unknown_Thread_Id = sal_config->first_unknown_thread_id;
    }
 
-   //status = status && SAL_I_Init_Thread_Module();
-   //status = status && SAL_I_Init_Buffer_Pools();
+   status = status && SAL_I_Init_Thread_Module();
+   status = status && SAL_I_Init_Buffer_Pools();
    //status = status && SAL_I_Init_Timer_Module();
-   //status = status && SAL_I_Init_Publish_Module();
-   //status = status && SAL_I_Init_Event_Property_Module();
+   status = status && SAL_I_Init_Publish_Module();
+   status = status && SAL_I_Init_Event_Property_Module();
 
 #if defined (XSAL)
    //status = status && SAL_I_Init_Connection_Module();
