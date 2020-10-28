@@ -3,6 +3,11 @@
         "ss_client_private.h": "c",
         "ss_client_friend.h": "c",
         "socket_client_api.h": "c",
-        "signal.h": "c"
+        "signal.h": "c",
+        "xsal_i_event_property.h": "c",
+        "xsal_i_dt.h": "c",
+        "dbg_trace.h": "c",
+        "xsal.h": "c",
+        "xsal_i_publish.h": "c"
     }
 }

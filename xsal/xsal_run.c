@@ -36,7 +36,6 @@ int32_t SAL_Run(void)
    }
    else
    {
-      /*
       if (SAL_I_Before_Run())
       {
          SAL_I_Thread_Table[SAL_ROUTER_THREAD_ID].thread_fnc = (SAL_Thread_Fnc_T)SAL_Run;
@@ -48,7 +47,6 @@ int32_t SAL_Run(void)
       {
          exit_status = -1;
       }
-      */
    }
    return exit_status;
 }

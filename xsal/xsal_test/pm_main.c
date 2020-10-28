@@ -53,7 +53,7 @@ static void Start_Threads(void)
 
    if (SAL_Start_Name_Server_Thread(&thread_attr) < 0)
    {
-      //Tr_Fault("Couldn't start Name Server thread");
+      Tr_Fault("Couldn't start Name Server thread");
       exit(1);
    }
 #if 0
@@ -110,7 +110,7 @@ int main(int argc, char* argv[])
         config.max_number_of_threads = PM_LAST_THREAD_ID;
         if (!SAL_Init(&config))
         {
-            //Tr_Fault_1("SAL_Init status = %d", (int)1);
+            Tr_Fault_1("SAL_Init status = %d", (int)1);
             exit(1);
         }
 
